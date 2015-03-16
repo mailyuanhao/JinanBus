@@ -1,16 +1,17 @@
 package com.example.yuan.jinanbus;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.Button;
 
+import static com.example.yuan.jinanbus.YhTest.*;
 
 public class BusSearchActivity extends ActionBarActivity {
 
@@ -53,6 +54,7 @@ public class BusSearchActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
+        private static String sTAG = "PlaceholderFragment";
         public PlaceholderFragment() {
         }
 
@@ -60,6 +62,14 @@ public class BusSearchActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_bus_search, container, false);
+            Button testButton = (Button)rootView.findViewById(R.id.test_button);
+            testButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(sTAG, "onClick");
+                    testBusJson2BusObject();
+                }
+            });
             return rootView;
         }
     }
