@@ -15,7 +15,7 @@ public class BusLineList {
     private static BusLineList sBusLineList;
     public static BusLineList get(Context c) {
         if (sBusLineList == null) {
-            sBusLineList = new BusLineList(c);
+            sBusLineList = new BusLineList(c.getApplicationContext());
         }
         return sBusLineList;
     }
