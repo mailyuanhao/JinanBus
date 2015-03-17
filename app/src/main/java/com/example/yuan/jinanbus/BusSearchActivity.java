@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 
 import static com.example.yuan.jinanbus.YhTest.*;
 
@@ -62,14 +63,28 @@ public class BusSearchActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_bus_search, container, false);
+
+            ListView buslineList = (ListView)rootView.findViewById(R.id.buslines_list);
+
+            Button queryBusLine = (Button)rootView.findViewById(R.id.query_bus_line);
+            queryBusLine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BusLineList.get(getActivity()).add(testBusLineParse());
+                }
+            });
+
             Button testButton = (Button)rootView.findViewById(R.id.test_button);
             testButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.d(sTAG, "onClick");
                     testBusJson2BusObject();
+                    testBusLineParse();
                 }
             });
+
+
             return rootView;
         }
     }

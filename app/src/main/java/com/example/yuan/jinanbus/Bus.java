@@ -1,6 +1,15 @@
 package com.example.yuan.jinanbus;
 
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+
 /**
  * 代表单独的一辆Bus
  * Created by Yuan on 2015/3/15.
@@ -13,11 +22,47 @@ class Bus {
     private String mIsArrvLft;
     private int mStationSeqNum;
     private String mBuslineId;
-    private String mActTime;
+    private Date mActTime;
     private String mCardId;
     private String mOrgName;
     private boolean mIsArriveDest;
     private int mDualSerialNum;
+
+    private static String sTAG = "Bus";
+
+    public static ArrayList<Bus> parse(String jsonString) {
+        ArrayList<Bus> buses = new ArrayList<>();
+        try {
+            JSONObject busesJson = new JSONObject(jsonString);
+            int status = busesJson.getJSONObject("status").getInt("code");
+            if (status == 0) {
+                JSONArray busJsonArray = busesJson.getJSONArray("result");
+                for (int i = 0; i < busJsonArray.length(); i++) {
+                    JSONObject busJson = busJsonArray.getJSONObject(i);
+                    Bus bus = new Bus();
+                    bus.setBusId(busJson.getString("busId"));
+                    bus.setLng(busJson.getDouble("lng"));
+                    bus.setLat(busJson.getDouble("lat"));
+                    bus.setVelocity(busJson.getDouble("velocity"));
+                    bus.setIsArrvLft(busJson.optString("isArrvLft", "-1"));
+                    bus.setStationSeqNum(busJson.getInt("stationSeqNum"));
+                    bus.setBuslineId(busJson.getString("buslineId"));
+                    bus.setActTime(BusLine.string2Date(busJson.getString("actTime")));
+                    bus.setCardId(busJson.getString("cardId"));
+                    bus.setOrgName(busJson.getString("orgName"));
+                    bus.setArriveDest(busJson.getBoolean("isArriveDest"));
+                    bus.setDualSerialNum(busJson.getInt("dualSerialNum"));
+                    buses.add(bus);
+                }
+            }
+        }
+        catch (JSONException e)
+        {
+            Log.d(sTAG, e.toString());
+        }
+
+        return buses;
+    }
 
     public String getBusId() {
         return mBusId;
@@ -75,14 +120,6 @@ class Bus {
         mBuslineId = buslineId;
     }
 
-    public String getActTime() {
-        return mActTime;
-    }
-
-    public void setActTime(String actTime) {
-        mActTime = actTime;
-    }
-
     public String getCardId() {
         return mCardId;
     }
@@ -113,5 +150,13 @@ class Bus {
 
     public void setArriveDest(boolean isArriveDest) {
         mIsArriveDest = isArriveDest;
+    }
+
+    public Date getActTime() {
+        return mActTime;
+    }
+
+    public void setActTime(Date actTime) {
+        mActTime = actTime;
     }
 }

@@ -2,4 +2,8 @@
     <string name="app_name">济南公交</string>
     <string name="action_settings">设置</string>
     <string name="test_button">测试</string>
+    <string name="bus_line_hint">请输入查询的线路</string>
+    <string name="query_busline">查询线路</string>
+    <string name="detail_text_view_hint">查询结果</string>
+    <string name="busline_query">线路查询</string>
 </resources>
