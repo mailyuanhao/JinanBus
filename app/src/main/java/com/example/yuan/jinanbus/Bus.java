@@ -39,19 +39,7 @@ class Bus {
                 JSONArray busJsonArray = busesJson.getJSONArray("result");
                 for (int i = 0; i < busJsonArray.length(); i++) {
                     JSONObject busJson = busJsonArray.getJSONObject(i);
-                    Bus bus = new Bus();
-                    bus.setBusId(busJson.getString("busId"));
-                    bus.setLng(busJson.getDouble("lng"));
-                    bus.setLat(busJson.getDouble("lat"));
-                    bus.setVelocity(busJson.getDouble("velocity"));
-                    bus.setIsArrvLft(busJson.optString("isArrvLft", "-1"));
-                    bus.setStationSeqNum(busJson.getInt("stationSeqNum"));
-                    bus.setBuslineId(busJson.getString("buslineId"));
-                    bus.setActTime(BusLine.string2Date(busJson.getString("actTime")));
-                    bus.setCardId(busJson.getString("cardId"));
-                    bus.setOrgName(busJson.getString("orgName"));
-                    bus.setArriveDest(busJson.getBoolean("isArriveDest"));
-                    bus.setDualSerialNum(busJson.getInt("dualSerialNum"));
+                    Bus bus = parseOneBus(busJson);
                     buses.add(bus);
                 }
             }
@@ -62,6 +50,23 @@ class Bus {
         }
 
         return buses;
+    }
+
+    private static Bus parseOneBus(JSONObject busJson) throws JSONException {
+        Bus bus = new Bus();
+        bus.setBusId(busJson.getString("busId"));
+        bus.setLng(busJson.getDouble("lng"));
+        bus.setLat(busJson.getDouble("lat"));
+        bus.setVelocity(busJson.getDouble("velocity"));
+        bus.setIsArrvLft(busJson.optString("isArrvLft", "-1"));
+        bus.setStationSeqNum(busJson.getInt("stationSeqNum"));
+        bus.setBuslineId(busJson.getString("buslineId"));
+        bus.setActTime(BusLine.string2Date(busJson.getString("actTime")));
+        bus.setCardId(busJson.getString("cardId"));
+        bus.setOrgName(busJson.getString("orgName"));
+        bus.setArriveDest(busJson.getBoolean("isArriveDest"));
+        bus.setDualSerialNum(busJson.getInt("dualSerialNum"));
+        return bus;
     }
 
     public String getBusId() {

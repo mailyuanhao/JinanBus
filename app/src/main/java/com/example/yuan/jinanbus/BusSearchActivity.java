@@ -81,9 +81,11 @@ public class BusSearchActivity extends ActionBarActivity {
                     Log.d(sTAG, "onClick");
                     testBusJson2BusObject();
                     testBusLineParse();
+                    testBusLineBriefParse();
                 }
             });
 
+            BusLineList.get(getActivity()).add(new BusLine());
 
             return rootView;
         }

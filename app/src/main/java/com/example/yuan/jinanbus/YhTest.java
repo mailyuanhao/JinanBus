@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by Yuan on 2015/3/16.
  */
 class YhTest {
-    private static String sBusLine = "{\n" +
+    public static String sBusLine = "{\n" +
             "    \"status\": {\n" +
             "        \"code\": 0\n" +
             "    },\n" +
@@ -266,7 +266,7 @@ class YhTest {
             "    }\n" +
             "}";
 
-    private static String sBuses = "{\n" +
+    public static String sBuses = "{\n" +
             "    \"status\": {\n" +
             "        \"code\": 0\n" +
             "    },\n" +
@@ -328,5 +328,13 @@ class YhTest {
             Log.d(sTAG, bs.getStationName());
         }
         return  bl;
+    }
+
+    public static ArrayList<BusLineBrief> testBusLineBriefParse() {
+        ArrayList<BusLineBrief> abb = BusLineBrief.parse(BusLineBrief.sJsonExample);
+        for (BusLineBrief blb : abb) {
+            Log.d(sTAG, "blb + " + blb);
+        }
+        return abb;
     }
 }

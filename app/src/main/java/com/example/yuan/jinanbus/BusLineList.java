@@ -28,6 +28,9 @@ public class BusLineList {
     public void add(BusLine bl) {
         mBusLines.add(bl);
     }
+    public void add(ArrayList<BusLine> arrayBusses) {
+        mBusLines.addAll(arrayBusses);
+    }
 
     public BusLine get(String id) {
         for (BusLine bl : mBusLines) {
