@@ -75,4 +75,9 @@ public class BusLineBrief {
     public Date getUpdateTime() {
         return mUpdateTime;
     }
+
+    @Override
+    public String toString() {
+        return mId + mStartStationName + mEndStationName;
+    }
 }

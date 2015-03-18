@@ -9,8 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import static com.example.yuan.jinanbus.YhTest.*;
 
@@ -56,7 +59,20 @@ public class BusSearchActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends Fragment {
 
         private static String sTAG = "PlaceholderFragment";
+        private ArrayList<BusLineBrief> mBusLineBriefs;
+        private ArrayAdapter<BusLineBrief> adapter;
+        private ListView buslineList;
         public PlaceholderFragment() {
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            mBusLineBriefs = BusLineBriefList.get(getActivity()).getBusLines();
+            adapter = new ArrayAdapter<>(getActivity(),
+                    android.R.layout.simple_list_item_1,
+                    mBusLineBriefs);
         }
 
         @Override
@@ -64,13 +80,15 @@ public class BusSearchActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_bus_search, container, false);
 
-            ListView buslineList = (ListView)rootView.findViewById(R.id.buslines_list);
+            buslineList = (ListView)rootView.findViewById(R.id.buslines_list);
+            buslineList.setAdapter(adapter);
 
             Button queryBusLine = (Button)rootView.findViewById(R.id.query_bus_line);
             queryBusLine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     BusLineBriefList.get(getActivity()).add(testBusLineBriefParse());
+                    adapter.notifyDataSetChanged();
                 }
             });
 

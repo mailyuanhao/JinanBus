@@ -33,6 +33,10 @@ public class BusLineBriefList {
         mBusLineBrief.addAll(arrayBusses);
     }
 
+    public ArrayList<BusLineBrief> getBusLines() {
+        return mBusLineBrief;
+    }
+
     public BusLineBrief get(String id) {
         for (BusLineBrief bl : mBusLineBrief) {
             if (bl.getId().equals(id))
