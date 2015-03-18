@@ -70,7 +70,7 @@ public class BusSearchActivity extends ActionBarActivity {
             queryBusLine.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    BusLineList.get(getActivity()).add(testBusLineParse());
+                    BusLineBriefList.get(getActivity()).add(testBusLineBriefParse());
                 }
             });
 
@@ -84,8 +84,6 @@ public class BusSearchActivity extends ActionBarActivity {
                     testBusLineBriefParse();
                 }
             });
-
-            BusLineList.get(getActivity()).add(new BusLine());
 
             return rootView;
         }
