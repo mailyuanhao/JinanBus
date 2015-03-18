@@ -1,5 +1,6 @@
 package com.example.yuan.jinanbus;
 
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -105,5 +106,14 @@ public class BusSearchActivity extends ActionBarActivity {
 
             return rootView;
         }
+
+        class QueryBusLineBrief extends AsyncTask<String, Integer, Long> {
+            @Override
+            protected Long doInBackground(String... params) {
+
+                return new Long(0);
+            }
+        }
     }
+
 }

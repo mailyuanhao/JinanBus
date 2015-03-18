@@ -46,7 +46,9 @@
                 android:layout_weight="0.04"
                 android:hint="@string/bus_line_hint"
                 android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"/>
+                android:layout_marginRight="16dp"
+                android:maxLength="3"
+                android:inputType="numberDecimal"/>
 
             <Button
                 android:layout_width="match_parent"
@@ -72,7 +74,10 @@
             android:id="@+id/buslines_list"
             android:layout_below="@+id/linearLayout"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"/>
+            android:layout_alignParentStart="true"
+            android:fastScrollEnabled="true"
+            android:fastScrollAlwaysVisible="false"
+            android:focusable="true"/>
 
     </LinearLayout>
 
