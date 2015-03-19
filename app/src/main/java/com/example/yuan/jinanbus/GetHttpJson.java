@@ -16,7 +16,7 @@ import java.net.URL;
  * Created by Yuan on 2015/3/18.
  */
 public class GetHttpJson {
-    public String getBusLineBriefJson(String path,
+    public static String getURLContentString(String path,
                                       String scharSet) {
         String ret = null;
         try {
@@ -50,12 +50,16 @@ public class GetHttpJson {
      */
     public static byte[] readStream(InputStream inputStream) throws IOException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int len = 0;
-        while ((len = inputStream.read(buffer)) != -1) {
-            bout.write(buffer, 0, len);
+        try {
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = inputStream.read(buffer)) != -1) {
+                bout.write(buffer, 0, len);
+            }
         }
-        bout.close();
+        finally {
+            bout.close();
+        }
 
         return bout.toByteArray();
     }
