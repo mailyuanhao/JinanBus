@@ -9,7 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**查询到线路列表的JSON解析结果，只包含简单信息
+/**
+ * 查询到线路列表的JSON解析结果，只包含简单信息
  * Created by Yuan on 2015/3/18.
  */
 public class BusLineBrief {
@@ -32,9 +33,7 @@ public class BusLineBrief {
                 BusLineBrief bus = parseOneLine(busJson);
                 buslines.add(bus);
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             Log.d(sTAG, e.toString());
         }
 
@@ -78,6 +77,6 @@ public class BusLineBrief {
 
     @Override
     public String toString() {
-        return mId + mStartStationName + mEndStationName;
+        return String.format("%1s路 %2s -> %3s", mLineName, mStartStationName, mEndStationName);
     }
 }

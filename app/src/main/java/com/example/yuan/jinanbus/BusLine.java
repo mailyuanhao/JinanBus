@@ -49,9 +49,7 @@ class BusLine {
                     parseJson2BusLine(bl, jsonResult);
                 }
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             Log.d(sTAG, "BusLine Error " + e);
         }
         return bl;
@@ -93,13 +91,11 @@ class BusLine {
             SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy h:mm:ss a");
             sdf.setDateFormatSymbols(DateFormatSymbols.getInstance(new Locale("en")));
             date = sdf.parse(strDate);
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             Log.d(sTAG, "ParseException" + e.toString());
         }
 
-        return  date;
+        return date;
     }
 
     public String getId() {

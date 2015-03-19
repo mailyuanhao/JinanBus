@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,10 +14,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.yuan.jinanbus.GetHttpJson.getURLContentString;
+import static com.example.yuan.jinanbus.MakeUrlString.makeBusLineBriefURL;
 import static com.example.yuan.jinanbus.YhTest.*;
 
 public class BusSearchActivity extends ActionBarActivity {
@@ -61,8 +67,11 @@ public class BusSearchActivity extends ActionBarActivity {
 
         private static String sTAG = "PlaceholderFragment";
         private ArrayList<BusLineBrief> mBusLineBriefs;
-        private ArrayAdapter<BusLineBrief> adapter;
-        private ListView buslineList;
+        private ArrayAdapter<BusLineBrief> mAdapter;
+        private ListView mBuslineList;
+        private EditText mBusLineBriefEditText;
+        private Button mQueryBusLine;
+
         public PlaceholderFragment() {
         }
 
@@ -71,7 +80,7 @@ public class BusSearchActivity extends ActionBarActivity {
             super.onCreate(savedInstanceState);
 
             mBusLineBriefs = BusLineBriefList.get(getActivity()).getBusLines();
-            adapter = new ArrayAdapter<>(getActivity(),
+            mAdapter = new ArrayAdapter<>(getActivity(),
                     android.R.layout.simple_list_item_1,
                     mBusLineBriefs);
         }
@@ -81,19 +90,41 @@ public class BusSearchActivity extends ActionBarActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_bus_search, container, false);
 
-            buslineList = (ListView)rootView.findViewById(R.id.buslines_list);
-            buslineList.setAdapter(adapter);
+            mBuslineList = (ListView) rootView.findViewById(R.id.buslines_list);
+            mBuslineList.setAdapter(mAdapter);
 
-            Button queryBusLine = (Button)rootView.findViewById(R.id.query_bus_line);
-            queryBusLine.setOnClickListener(new View.OnClickListener() {
+            mBusLineBriefEditText = (EditText) rootView.findViewById(R.id.bus_line_text_view);
+            mBusLineBriefEditText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void onClick(View v) {
-                    BusLineBriefList.get(getActivity()).add(testBusLineBriefParse());
-                    adapter.notifyDataSetChanged();
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    setQueryButtonEnabled(s.toString());
                 }
             });
 
-            Button testButton = (Button)rootView.findViewById(R.id.test_button);
+            mQueryBusLine = (Button) rootView.findViewById(R.id.query_bus_line);
+            setQueryButtonEnabled(mBusLineBriefEditText.getText().toString());
+            mQueryBusLine.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BusLineBriefList.get(getActivity()).clear();
+                    String s = mBusLineBriefEditText.getText().toString();
+                    if (s != null && s.length() > 0) {
+                        new QueryBusLineBrief().execute(s);
+                    }
+                }
+            });
+
+            Button testButton = (Button) rootView.findViewById(R.id.test_button);
             testButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -103,16 +134,52 @@ public class BusSearchActivity extends ActionBarActivity {
                     testBusLineBriefParse();
                 }
             });
+            testButton.setVisibility(View.INVISIBLE);
 
             return rootView;
         }
 
-        class QueryBusLineBrief extends AsyncTask<String, Integer, Long> {
-            @Override
-            protected Long doInBackground(String... params) {
-
-                return new Long(0);
+        private void setQueryButtonEnabled(String sContent) {
+            if (sContent == null || sContent.isEmpty()) {
+                mQueryBusLine.setEnabled(false);
+            } else {
+                mQueryBusLine.setEnabled(true);
             }
+        }
+
+        class QueryBusLineBrief extends AsyncTask<String, Integer, String> {
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if (s != null) {
+                    Log.d(sTAG, s);
+                    BusLineBriefList.get(getActivity()).add(BusLineBrief.parse(s));
+                    if (BusLineBriefList.get(getActivity()).getBusLines().isEmpty()) {
+                        showToastInfo(R.string.bus_line_not_exist);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    showToastInfo(R.string.query_failed);
+                }
+            }
+
+            @Override
+            protected String doInBackground(String... params) {
+                String sUrl = makeBusLineBriefURL(params[0]);
+                String s = getURLContentString(sUrl, "UTF-8");
+                return s;
+            }
+        }
+
+        private void showToastInfo(int id) {
+            Toast.makeText(getActivity(),
+                    id,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -4,7 +4,8 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-/**编写一些用于调试的函数
+/**
+ * 编写一些用于调试的函数
  * Created by Yuan on 2015/3/16.
  */
 class YhTest {
@@ -314,9 +315,10 @@ class YhTest {
             "}";
 
     private static String sTAG = "YH_TEST";
+
     public static void testBusJson2BusObject() {
         ArrayList<Bus> arrayBuses = Bus.parse(sBuses);
-        for (Bus b: arrayBuses) {
+        for (Bus b : arrayBuses) {
             Log.d(sTAG, b.getBusId() + b.getActTime());
         }
     }
@@ -327,7 +329,7 @@ class YhTest {
         for (BusLine.Station bs : bl.getStations()) {
             Log.d(sTAG, bs.getStationName());
         }
-        return  bl;
+        return bl;
     }
 
     public static ArrayList<BusLineBrief> testBusLineBriefParse() {

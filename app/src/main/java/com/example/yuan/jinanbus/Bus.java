@@ -43,9 +43,7 @@ class Bus {
                     buses.add(bus);
                 }
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             Log.d(sTAG, e.toString());
         }
 
