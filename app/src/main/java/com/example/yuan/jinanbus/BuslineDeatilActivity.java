@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,6 +38,7 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
     public static String sLineIdExtra = "com.example.yuan.LINE_ID";
     public static String sTAG = "BusLineDetailActivity";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +50,8 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
+                getIntent().getStringExtra(sLineIdExtra ));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -122,33 +123,51 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
+        private final int iLineDetailSection = 0;
+        private final int iBusesDetailSection = 1;
+        private final int iStationsSection = 2;
+        private final int iSectionSum = 3;
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        private String mBusId = "";
+
+        public SectionsPagerAdapter(FragmentManager fm, String iBusId) {
             super(fm);
+            mBusId = iBusId;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            Bundle args = new Bundle();
+            args.putString(sLineIdExtra, mBusId);
+            switch (position) {
+                default:
+                case iLineDetailSection:
+                    BusLineFragment blf = new BusLineFragment();
+                    blf.setArguments(args);
+                    return blf;
+                //case iBusesDetailSection:
+                //case iStationsSection:
+            }
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 1; //暂时先只显示一个
+            //return iSectionSum;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
             switch (position) {
-                case 0:
+                case iLineDetailSection:
                     return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
+                case iBusesDetailSection:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
+                case iStationsSection:
                     return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
@@ -158,33 +177,52 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    public static class BusLineFragment extends Fragment {
+        private final String mLineInfoFormat = "线路名称：%1s\n" +
+                "起始站：%2s\n" +
+                "终点站：%3s\n" +
+                "票价：%4s\n" +
+                "运行时间：%5s\n" +
+                "站列表：\n";
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
+        private TextView mTextView;
+        public BusLineFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_busline_deatil, container, false);
+            mTextView = (TextView)rootView.findViewById(R.id.textViewBusLineDetail);
             return rootView;
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            String i = getArguments().getString(sLineIdExtra, "");
+            new QueryLineDetail().execute(MakeUrlString.makeBusLineDetailURL(i));
+        }
+
+        private class QueryLineDetail extends QueryTask {
+            @Override
+            protected void onPostExecute(String s) {
+                BusLine bl = BusLine.parse(s);
+                String sInfo = "????";
+                if (bl != null) {
+                    sInfo = String.format(mLineInfoFormat, bl.getLineName(),
+                            bl.getStartStationName(),
+                            bl.getEndStationName(),
+                            bl.getTicketPrice(),
+                            bl.getOperationTime()
+                            );
+                    for (BusLine.Station st : bl.getStations()) {
+                        sInfo += st.getStationName();
+                        sInfo += "\n";
+                    }
+                }
+                mTextView.setText(sInfo);
+            }
         }
     }
 

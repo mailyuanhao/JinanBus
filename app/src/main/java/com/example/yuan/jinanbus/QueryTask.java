@@ -11,7 +11,7 @@ import static com.example.yuan.jinanbus.MakeUrlString.makeBusLineBriefURL;
 public class QueryTask extends AsyncTask<String, Integer, String> {
     @Override
     protected String doInBackground(String... params) {
-        String sUrl = makeBusLineBriefURL(params[0]);
+        String sUrl = params[0];
         String s = getURLContentString(sUrl, "UTF-8");
         return s;
     }

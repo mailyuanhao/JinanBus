@@ -98,9 +98,11 @@ public class BusSearchActivity extends ActionBarActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     BusLineBrief blb = BusLineBriefList.get(getActivity()).get(position);
-                    Intent i = new Intent(getActivity(), BuslineDeatilActivity.class);
-                    i.putExtra(BuslineDeatilActivity.sLineIdExtra, blb.getId());
-                    startActivity(i);
+                    if (blb != null) {
+                        Intent i = new Intent(getActivity(), BuslineDeatilActivity.class);
+                        i.putExtra(BuslineDeatilActivity.sLineIdExtra, blb.getId());
+                        startActivity(i);
+                    }
                 }
             });
 
@@ -130,7 +132,7 @@ public class BusSearchActivity extends ActionBarActivity {
                     BusLineBriefList.get(getActivity()).clear();
                     String s = mBusLineBriefEditText.getText().toString();
                     if (s != null && s.length() > 0) {
-                        new QueryBusLineBrief().execute(s);
+                        new QueryBusLineBrief().execute(makeBusLineBriefURL(s));
                     }
                 }
             });
