@@ -1,7 +1,9 @@
 package com.example.yuan.jinanbus;
 
 import java.util.Locale;
+import java.util.logging.Handler;
 
+import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -186,6 +188,7 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
                 "站列表：\n";
 
         private TextView mTextView;
+        private ProgressDialog mProgressDialog;
         public BusLineFragment() {
         }
 
@@ -200,6 +203,9 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
         @Override
         public void onResume() {
             super.onResume();
+            mProgressDialog = ProgressDialog.show(getActivity(),
+                    getString(R.string.working),
+                    getString(R.string.please_wait));
             String i = getArguments().getString(sLineIdExtra, "");
             new QueryLineDetail().execute(MakeUrlString.makeBusLineDetailURL(i));
         }
@@ -221,6 +227,7 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
                         sInfo += "\n";
                     }
                 }
+                mProgressDialog.dismiss();
                 mTextView.setText(sInfo);
             }
         }

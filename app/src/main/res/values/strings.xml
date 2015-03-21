@@ -15,4 +15,7 @@
     <string name="title_section2">车辆详情</string>
     <string name="title_section3">车辆分布</string>
 
+    <string name="please_wait">请稍等...</string>
+    <string name="working">正在查询</string>
+
 </resources>
