@@ -1,5 +1,6 @@
 package com.example.yuan.jinanbus;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -92,16 +94,25 @@ public class BusSearchActivity extends ActionBarActivity {
 
             mBuslineList = (ListView) rootView.findViewById(R.id.buslines_list);
             mBuslineList.setAdapter(mAdapter);
+            mBuslineList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    BusLineBrief blb = BusLineBriefList.get(getActivity()).get(position);
+                    Intent i = new Intent(getActivity(), BuslineDeatilActivity.class);
+                    i.putExtra(BuslineDeatilActivity.sLineIdExtra, blb.getId());
+                    startActivity(i);
+                }
+            });
 
             mBusLineBriefEditText = (EditText) rootView.findViewById(R.id.bus_line_text_view);
             mBusLineBriefEditText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
                 }
 
@@ -147,11 +158,11 @@ public class BusSearchActivity extends ActionBarActivity {
             }
         }
 
-        class QueryBusLineBrief extends AsyncTask<String, Integer, String> {
-
+        class QueryBusLineBrief extends QueryTask {
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
+                mQueryBusLine.setEnabled(false);
             }
 
             @Override
@@ -166,13 +177,7 @@ public class BusSearchActivity extends ActionBarActivity {
                 } else {
                     showToastInfo(R.string.query_failed);
                 }
-            }
-
-            @Override
-            protected String doInBackground(String... params) {
-                String sUrl = makeBusLineBriefURL(params[0]);
-                String s = getURLContentString(sUrl, "UTF-8");
-                return s;
+                mQueryBusLine.setEnabled(true);
             }
         }
 

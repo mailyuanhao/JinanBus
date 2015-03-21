@@ -8,4 +8,11 @@
     <string name="busline_query">线路查询</string>
     <string name="query_failed">查询失败，请保持网络畅通。</string>
     <string name="bus_line_not_exist">查询的公交线路不存在。</string>
+    <string name="title_activity_busline_deatil">BuslineDeatilActivity</string>
+
+
+    <string name="title_section1">路线详情</string>
+    <string name="title_section2">车辆详情</string>
+    <string name="title_section3">车辆分布</string>
+
 </resources>

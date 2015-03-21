@@ -43,6 +43,12 @@ public class BusLineBriefList {
         return mBusLineBrief;
     }
 
+    public BusLineBrief get(int position){
+        if (position >= 0 && position < mBusLineBrief.size()) {
+            return mBusLineBrief.get(position);
+        }
+        return null;
+    }
     public BusLineBrief get(String id) {
         for (BusLineBrief bl : mBusLineBrief) {
             if (bl.getId().equals(id)) {
