@@ -162,4 +162,9 @@ class Bus {
     public void setActTime(Date actTime) {
         mActTime = actTime;
     }
+
+    public String toString() {
+        String f = "ID：%1s, 即将到达：%2s";
+        return String.format(f, getBusId(), getStationSeqNum());
+    }
 }

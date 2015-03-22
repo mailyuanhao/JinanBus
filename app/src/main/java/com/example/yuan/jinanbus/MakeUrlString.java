@@ -14,4 +14,9 @@ public class MakeUrlString {
         String s = "http://60.216.101.229/server-ue2/rest/buslines/370100/%1s";
         return String.format(s, iID);
     }
+
+    public static String makeBusDetailURL(String iID) {
+        String s = "http://60.216.101.229/server-ue2/rest/buses/busline/370100/%1s";
+        return String.format(s, iID);
+    }
 }
