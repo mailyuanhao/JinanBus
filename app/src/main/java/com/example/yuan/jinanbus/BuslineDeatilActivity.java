@@ -1,7 +1,6 @@
 package com.example.yuan.jinanbus;
 
 import java.util.Locale;
-import java.util.logging.Handler;
 
 import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
@@ -20,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
-public class BuslineDeatilActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class BuslineDeatilActivity
+        extends ActionBarActivity
+        implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -149,7 +150,10 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
                     BusLineFragment blf = new BusLineFragment();
                     blf.setArguments(args);
                     return blf;
-                //case iBusesDetailSection:
+                case iBusesDetailSection:
+                    BusFragment bf = new BusFragment();
+                    bf.setArguments(args);
+                    return bf;
                 //case iStationsSection:
             }
         }
@@ -157,7 +161,7 @@ public class BuslineDeatilActivity extends ActionBarActivity implements ActionBa
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 1; //暂时先只显示一个
+            return 2; //暂时先只显示两个
             //return iSectionSum;
         }
 
