@@ -201,17 +201,14 @@ public class BuslineDeatilActivity
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_busline_deatil, container, false);
             mTextView = (TextView)rootView.findViewById(R.id.textViewBusLineDetail);
-            return rootView;
-        }
 
-        @Override
-        public void onResume() {
-            super.onResume();
             mProgressDialog = ProgressDialog.show(getActivity(),
                     getString(R.string.working),
                     getString(R.string.please_wait));
             String i = getArguments().getString(sLineIdExtra, "");
             new QueryLineDetail().execute(MakeUrlString.makeBusLineDetailURL(i));
+
+            return rootView;
         }
 
         private class QueryLineDetail extends QueryTask {
