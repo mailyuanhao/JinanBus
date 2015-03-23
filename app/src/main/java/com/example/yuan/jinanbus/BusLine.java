@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.DateFormatSymbols;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import java.util.Locale;
  * 一条公交线
  * Created by Yuan on 2015/3/15.
  */
-class BusLine {
-    private static String sTAG = "BusLine";
+class BusLine implements Serializable{
+    private static final String sTAG = "BusLine";
     private String mId;
     private int mArea;
     private String mLocalLineId;
@@ -30,7 +30,7 @@ class BusLine {
     private String mStartStationName;
     private String mState;
     private String mStationList;
-    private ArrayList<Station> mStations = new ArrayList<>();
+    private final ArrayList<Station> mStations = new ArrayList<>();
     private String mTicketPrice;
     private String mOperationTime;
     private String mOwner;
@@ -88,8 +88,7 @@ class BusLine {
         GregorianCalendar gc = new GregorianCalendar(1970, Calendar.JANUARY, 1);
         Date date = gc.getTime();
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy h:mm:ss a");
-            sdf.setDateFormatSymbols(DateFormatSymbols.getInstance(new Locale("en")));
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM d, yyyy h:mm:ss a", Locale.US);
             date = sdf.parse(strDate);
         } catch (ParseException e) {
             Log.d(sTAG, "ParseException" + e.toString());
@@ -243,7 +242,7 @@ class BusLine {
             mUpdateTime = updateTime;
         }
 
-        private static String sTAG = "Station";
+        private static final String sTAG = "Station";
     }
 
 }

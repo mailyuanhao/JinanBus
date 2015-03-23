@@ -14,6 +14,7 @@ import java.util.Date;
  * 代表单独的一辆Bus
  * Created by Yuan on 2015/3/15.
  */
+@SuppressWarnings("FieldCanBeLocal")
 class Bus {
     private String mBusId;
     private double mLng;
@@ -27,8 +28,10 @@ class Bus {
     private String mOrgName;
     private boolean mIsArriveDest;
     private int mDualSerialNum;
+    //指向自己的线路列表
+    private BusLine mBusLine;
 
-    private static String sTAG = "Bus";
+    private static final String sTAG = "Bus";
 
     public static ArrayList<Bus> parse(String jsonString) {
         ArrayList<Bus> buses = new ArrayList<>();
@@ -71,7 +74,7 @@ class Bus {
         return mBusId;
     }
 
-    public void setBusId(String busId) {
+    void setBusId(String busId) {
         mBusId = busId;
     }
 
@@ -79,15 +82,11 @@ class Bus {
         return mLng;
     }
 
-    public void setLng(double lng) {
+    void setLng(double lng) {
         mLng = lng;
     }
 
-    public double getLat() {
-        return mLat;
-    }
-
-    public void setLat(double lat) {
+    void setLat(double lat) {
         mLat = lat;
     }
 
@@ -95,7 +94,7 @@ class Bus {
         return mVelocity;
     }
 
-    public void setVelocity(double velocity) {
+    void setVelocity(double velocity) {
         mVelocity = velocity;
     }
 
@@ -103,15 +102,15 @@ class Bus {
         return mIsArrvLft;
     }
 
-    public void setIsArrvLft(String isArrvLft) {
+    void setIsArrvLft(String isArrvLft) {
         mIsArrvLft = isArrvLft;
     }
 
-    public int getStationSeqNum() {
+    int getStationSeqNum() {
         return mStationSeqNum;
     }
 
-    public void setStationSeqNum(int stationSeqNum) {
+    void setStationSeqNum(int stationSeqNum) {
         mStationSeqNum = stationSeqNum;
     }
 
@@ -119,7 +118,7 @@ class Bus {
         return mBuslineId;
     }
 
-    public void setBuslineId(String buslineId) {
+    void setBuslineId(String buslineId) {
         mBuslineId = buslineId;
     }
 
@@ -127,7 +126,7 @@ class Bus {
         return mCardId;
     }
 
-    public void setCardId(String cardId) {
+    void setCardId(String cardId) {
         mCardId = cardId;
     }
 
@@ -135,7 +134,7 @@ class Bus {
         return mOrgName;
     }
 
-    public void setOrgName(String orgName) {
+    void setOrgName(String orgName) {
         mOrgName = orgName;
     }
 
@@ -143,7 +142,7 @@ class Bus {
         return mDualSerialNum;
     }
 
-    public void setDualSerialNum(int dualSerialNum) {
+    void setDualSerialNum(int dualSerialNum) {
         mDualSerialNum = dualSerialNum;
     }
 
@@ -151,7 +150,7 @@ class Bus {
         return mIsArriveDest;
     }
 
-    public void setArriveDest(boolean isArriveDest) {
+    void setArriveDest(boolean isArriveDest) {
         mIsArriveDest = isArriveDest;
     }
 
@@ -159,12 +158,30 @@ class Bus {
         return mActTime;
     }
 
-    public void setActTime(Date actTime) {
+    void setActTime(Date actTime) {
         mActTime = actTime;
+    }
+
+    private String getStationName(){
+        int i = getStationSeqNum();
+        if (mBusLine != null) {
+            if (i >= 0 && i < mBusLine.getStations().size()) {
+                return mBusLine.getStations().get(i).getStationName();
+            }
+        }
+        return String.valueOf(i);
     }
 
     public String toString() {
         String f = "ID：%1s, 即将到达：%2s";
-        return String.format(f, getBusId(), getStationSeqNum());
+        return String.format(f, getBusId(), getStationName());
+    }
+
+    public BusLine getBusLine() {
+        return mBusLine;
+    }
+
+    public void setBusLine(BusLine busLine) {
+        mBusLine = busLine;
     }
 }

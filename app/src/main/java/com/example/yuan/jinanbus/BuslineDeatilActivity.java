@@ -2,7 +2,6 @@ package com.example.yuan.jinanbus;
 
 import java.util.Locale;
 
-import android.app.ProgressDialog;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -31,14 +30,15 @@ public class BuslineDeatilActivity
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    private ViewPager mViewPager;
 
-    public static String sLineIdExtra = "com.example.yuan.LINE_ID";
+    public static final String sLineIdExtra = "com.example.yuan.LINE_ID";
+    public static final String sBusLineDetail = "com.example.yuan.LINE_DETAIL";
     public static String sTAG = "BusLineDetailActivity";
 
 
@@ -54,7 +54,8 @@ public class BuslineDeatilActivity
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),
-                getIntent().getStringExtra(sLineIdExtra ));
+                getIntent().getStringExtra(sLineIdExtra ),
+                getIntent().getStringExtra(sBusLineDetail));
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -130,12 +131,13 @@ public class BuslineDeatilActivity
         private final int iBusesDetailSection = 1;
         private final int iStationsSection = 2;
         private final int iSectionSum = 3;
-
+        private final String mBusLine;
         private String mBusId = "";
 
-        public SectionsPagerAdapter(FragmentManager fm, String iBusId) {
+        public SectionsPagerAdapter(FragmentManager fm, String iBusId, String busLine) {
             super(fm);
             mBusId = iBusId;
+            mBusLine = busLine;
         }
 
         @Override
@@ -144,6 +146,7 @@ public class BuslineDeatilActivity
             // Return a PlaceholderFragment (defined as a static inner class below).
             Bundle args = new Bundle();
             args.putString(sLineIdExtra, mBusId);
+            args.putString(sBusLineDetail, mBusLine);
             switch (position) {
                 default:
                 case iLineDetailSection:
@@ -192,8 +195,13 @@ public class BuslineDeatilActivity
                 "站列表：\n";
 
         private TextView mTextView;
-        private ProgressDialog mProgressDialog;
-        public BusLineFragment() {
+        private BusLine mBusLine;
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            mBusLine = BusLine.parse(getArguments().getString(sBusLineDetail));
         }
 
         @Override
@@ -202,36 +210,22 @@ public class BuslineDeatilActivity
             View rootView = inflater.inflate(R.layout.fragment_busline_deatil, container, false);
             mTextView = (TextView)rootView.findViewById(R.id.textViewBusLineDetail);
 
-            mProgressDialog = ProgressDialog.show(getActivity(),
-                    getString(R.string.working),
-                    getString(R.string.please_wait));
-            String i = getArguments().getString(sLineIdExtra, "");
-            new QueryLineDetail().execute(MakeUrlString.makeBusLineDetailURL(i));
+            String sInfo = String.format(mLineInfoFormat, mBusLine.getLineName(),
+                    mBusLine.getStartStationName(),
+                    mBusLine.getEndStationName(),
+                    mBusLine.getTicketPrice(),
+                    mBusLine.getOperationTime()
+            );
+            for (BusLine.Station st : mBusLine.getStations()) {
+                sInfo += st.getStationName();
+                sInfo += "\n";
+            }
+
+            mTextView.setText(sInfo);
 
             return rootView;
         }
 
-        private class QueryLineDetail extends QueryTask {
-            @Override
-            protected void onPostExecute(String s) {
-                BusLine bl = BusLine.parse(s);
-                String sInfo = "????";
-                if (bl != null) {
-                    sInfo = String.format(mLineInfoFormat, bl.getLineName(),
-                            bl.getStartStationName(),
-                            bl.getEndStationName(),
-                            bl.getTicketPrice(),
-                            bl.getOperationTime()
-                            );
-                    for (BusLine.Station st : bl.getStations()) {
-                        sInfo += st.getStationName();
-                        sInfo += "\n";
-                    }
-                }
-                mProgressDialog.dismiss();
-                mTextView.setText(sInfo);
-            }
-        }
     }
 
 }

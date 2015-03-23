@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by Yuan on 2015/3/16.
  */
 class YhTest {
-    public static String sBusLine = "{\n" +
+    private static final String sBusLine = "{\n" +
             "    \"status\": {\n" +
             "        \"code\": 0\n" +
             "    },\n" +
@@ -267,7 +267,7 @@ class YhTest {
             "    }\n" +
             "}";
 
-    public static String sBuses = "{\n" +
+    private static final String sBuses = "{\n" +
             "    \"status\": {\n" +
             "        \"code\": 0\n" +
             "    },\n" +
@@ -314,7 +314,7 @@ class YhTest {
             "    ]\n" +
             "}";
 
-    private static String sTAG = "YH_TEST";
+    private static final String sTAG = "YH_TEST";
 
     public static void testBusJson2BusObject() {
         ArrayList<Bus> arrayBuses = Bus.parse(sBuses);

@@ -2,9 +2,6 @@ package com.example.yuan.jinanbus;
 
 import android.util.Log;
 
-import org.apache.http.HttpConnection;
-
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,11 +14,11 @@ import java.net.URL;
  * "UTF-8"
  * Created by Yuan on 2015/3/18.
  */
-public class GetHttpJson {
-    public static String sTAG = "GetHttpJson";
+@SuppressWarnings("ALL")
+class GetHttpJson {
+    private static final String sTAG = "GetHttpJson";
 
-    public static String getURLContentString(String path,
-                                             String scharSet) {
+    public static String getURLContentString(String path) {
         String ret = null;
         try {
             URL url = new URL(path);
@@ -33,13 +30,11 @@ public class GetHttpJson {
                 InputStream is = conn.getInputStream();// 获取输入流)
                 try {
                     byte[] data = readStream(is);   // 把输入流转换成字符数组
-                    ret = new String(data, scharSet); // 把字符数组转换成字符串
+                    ret = new String(data, "UTF-8"); // 把字符数组转换成字符串
                 } finally {
                     is.close();
                 }
             }
-        } catch (MalformedURLException e) {
-            Log.d(sTAG, e.toString());
         } catch (IOException e) {
             Log.d(sTAG, e.toString());
         }
@@ -53,11 +48,11 @@ public class GetHttpJson {
      * @return 字符数组
      * @throws IOException
      */
-    public static byte[] readStream(InputStream inputStream) throws IOException {
+    private static byte[] readStream(InputStream inputStream) throws IOException {
         ByteArrayOutputStream bout = new ByteArrayOutputStream();
         try {
             byte[] buffer = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = inputStream.read(buffer)) != -1) {
                 bout.write(buffer, 0, len);
             }

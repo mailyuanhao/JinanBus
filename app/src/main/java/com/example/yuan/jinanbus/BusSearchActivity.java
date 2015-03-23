@@ -1,7 +1,7 @@
 package com.example.yuan.jinanbus;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static com.example.yuan.jinanbus.GetHttpJson.getURLContentString;
 import static com.example.yuan.jinanbus.MakeUrlString.makeBusLineBriefURL;
+import static com.example.yuan.jinanbus.MakeUrlString.makeBusLineDetailURL;
 import static com.example.yuan.jinanbus.YhTest.*;
 
 public class BusSearchActivity extends ActionBarActivity {
@@ -67,15 +67,14 @@ public class BusSearchActivity extends ActionBarActivity {
      */
     public static class PlaceholderFragment extends Fragment {
 
-        private static String sTAG = "PlaceholderFragment";
+        private static final String sTAG = "PlaceholderFragment";
         private ArrayList<BusLineBrief> mBusLineBriefs;
         private ArrayAdapter<BusLineBrief> mAdapter;
         private ListView mBuslineList;
         private EditText mBusLineBriefEditText;
         private Button mQueryBusLine;
+        private ProgressDialog mProgressDialog;
 
-        public PlaceholderFragment() {
-        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -99,9 +98,7 @@ public class BusSearchActivity extends ActionBarActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     BusLineBrief blb = BusLineBriefList.get(getActivity()).get(position);
                     if (blb != null) {
-                        Intent i = new Intent(getActivity(), BuslineDeatilActivity.class);
-                        i.putExtra(BuslineDeatilActivity.sLineIdExtra, blb.getId());
-                        startActivity(i);
+                        (new QueryLineDetail()).execute(makeBusLineDetailURL(blb.getId()));
                     }
                 }
             });
@@ -180,6 +177,29 @@ public class BusSearchActivity extends ActionBarActivity {
                     showToastInfo(R.string.query_failed);
                 }
                 mQueryBusLine.setEnabled(true);
+            }
+        }
+
+
+        class QueryLineDetail extends QueryTask {
+
+            @Override
+            protected void onPreExecute() {
+                mProgressDialog = ProgressDialog.show(getActivity(),
+                        getString(R.string.working),
+                        getString(R.string.please_wait));
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                BusLine bl = BusLine.parse(s);
+                if (bl != null) {
+                    Intent i = new Intent(getActivity(), BuslineDeatilActivity.class);
+                    i.putExtra(BuslineDeatilActivity.sLineIdExtra, bl.getId());
+                    i.putExtra(BuslineDeatilActivity.sBusLineDetail, s);
+                    startActivity(i);
+                }
+                mProgressDialog.dismiss();
             }
         }
 

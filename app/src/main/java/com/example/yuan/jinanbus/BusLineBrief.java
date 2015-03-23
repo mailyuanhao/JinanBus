@@ -13,9 +13,10 @@ import java.util.Date;
  * 查询到线路列表的JSON解析结果，只包含简单信息
  * Created by Yuan on 2015/3/18.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class BusLineBrief {
-    public static String sJsonExample = "{\"status\":{\"code\":0},\"result\":{\"pageParam\":{\"offset\":0,\"len\":20,\"totalNum\":2},\"result\":[{\"id\":\"41\",\"localLineId\":\"33692957\",\"endStationName\":\"营市街\",\"lineName\":\"K22\",\"startStationName\":\"公交营运中心\",\"updateTime\":\"Aug 12, 2014 8:08:57 AM\"},{\"id\":\"42\",\"localLineId\":\"33692958\",\"endStationName\":\"公交营运中心\",\"lineName\":\"K22\",\"startStationName\":\"营市街\",\"updateTime\":\"Aug 12, 2014 8:09:21 AM\"}]}}";
-    private static String sTAG = "BusLineBrief";
+    public static final String sJsonExample = "{\"status\":{\"code\":0},\"result\":{\"pageParam\":{\"offset\":0,\"len\":20,\"totalNum\":2},\"result\":[{\"id\":\"41\",\"localLineId\":\"33692957\",\"endStationName\":\"营市街\",\"lineName\":\"K22\",\"startStationName\":\"公交营运中心\",\"updateTime\":\"Aug 12, 2014 8:08:57 AM\"},{\"id\":\"42\",\"localLineId\":\"33692958\",\"endStationName\":\"公交营运中心\",\"lineName\":\"K22\",\"startStationName\":\"营市街\",\"updateTime\":\"Aug 12, 2014 8:09:21 AM\"}]}}";
+    private static final String sTAG = "BusLineBrief";
     private String mId;
     private String mLocalLineId;
     private String mEndStationName;

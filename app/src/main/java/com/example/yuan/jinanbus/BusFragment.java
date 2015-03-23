@@ -1,7 +1,6 @@
 package com.example.yuan.jinanbus;
 
 
-import android.app.ListFragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ public class BusFragment extends Fragment {
     private String mBusId;
     private ArrayAdapter<Bus> mBusArrayAdapter;
     private BusList mBusList;
+    private BusLine mBusLine;
     public BusFragment() {
         // Required empty public constructor
     }
@@ -26,11 +26,12 @@ public class BusFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mBusId = getArguments().getString(BuslineDeatilActivity.sLineIdExtra);
+            mBusLine = BusLine.parse(getArguments().getString(BuslineDeatilActivity.sBusLineDetail));
         }
 
         mBusList = new BusList();
 
-        mBusArrayAdapter = new ArrayAdapter<Bus>(getActivity(),
+        mBusArrayAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1,
                 mBusList.getBuses());
 
@@ -55,6 +56,7 @@ public class BusFragment extends Fragment {
         protected void onPostExecute(String s) {
             ArrayList<Bus> alb = Bus.parse(s);
             for (Bus b : alb) {
+                b.setBusLine(mBusLine);
                 mBusList.insertBus(b);
             }
 

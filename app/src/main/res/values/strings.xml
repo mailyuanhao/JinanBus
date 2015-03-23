@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">济南公交</string>
     <string name="action_settings">设置</string>
     <string name="test_button">测试</string>
@@ -15,10 +15,10 @@
     <string name="title_section2">车辆详情</string>
     <string name="title_section3">车辆分布</string>
 
-    <string name="please_wait">请稍等...</string>
+    <string name="please_wait">请稍等…</string>
     <string name="working">正在查询</string>
 
 <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" tools:ignore="UnusedResources">Hello blank fragment</string>
 
 </resources>

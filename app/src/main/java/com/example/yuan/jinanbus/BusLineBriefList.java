@@ -8,9 +8,10 @@ import java.util.ArrayList;
  * 存储查询到的BusLine
  * Created by Yuan on 2015/3/17.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class BusLineBriefList {
-    private ArrayList<BusLineBrief> mBusLineBrief;
-    private Context mAppContext;
+    private final ArrayList<BusLineBrief> mBusLineBrief;
+    private final Context mAppContext;
 
 
     private static BusLineBriefList sBusLineBriefList;
