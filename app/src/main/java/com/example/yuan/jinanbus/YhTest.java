@@ -323,20 +323,18 @@ class YhTest {
         }
     }
 
-    public static BusLine testBusLineParse() {
+    public static void testBusLineParse() {
         BusLine bl = BusLine.parse(sBusLine);
         Log.d(sTAG, bl.getStartStationName() + bl.getEndStationName() + bl.getStations().size());
         for (BusLine.Station bs : bl.getStations()) {
             Log.d(sTAG, bs.getStationName());
         }
-        return bl;
     }
 
-    public static ArrayList<BusLineBrief> testBusLineBriefParse() {
+    public static void testBusLineBriefParse() {
         ArrayList<BusLineBrief> abb = BusLineBrief.parse(BusLineBrief.sJsonExample);
         for (BusLineBrief blb : abb) {
             Log.d(sTAG, "blb + " + blb);
         }
-        return abb;
     }
 }
