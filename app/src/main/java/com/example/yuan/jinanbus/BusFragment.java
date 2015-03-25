@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
 
 public class BusFragment extends Fragment {
 
@@ -36,8 +38,12 @@ public class BusFragment extends Fragment {
                 mBusList.getBuses());
 
 
-        new QueryBuses().execute(MakeUrlString.makeBusDetailURL(mBusId));
+        startRefreshBusInfo();
 
+    }
+
+    private void startRefreshBusInfo() {
+        new QueryBuses().execute(MakeUrlString.makeBusDetailURL(mBusId));
     }
 
     @Override
@@ -51,16 +57,36 @@ public class BusFragment extends Fragment {
         return rootView;
     }
 
+
     private class QueryBuses extends QueryTask {
+
+        private final int mDelay = 10 * 1000;
+        android.os.Handler mHandler = new android.os.Handler();
+        Runnable mRunnable = new Runnable() {
+            @Override
+            public void run() {
+                startRefreshBusInfo();
+            }
+        };
+
         @Override
         protected void onPostExecute(String s) {
-            ArrayList<Bus> alb = Bus.parse(s);
-            for (Bus b : alb) {
-                b.setBusLine(mBusLine);
-                mBusList.insertBus(b);
+            try {
+                ArrayList<Bus> alb = Bus.parse(s);
+                if (!alb.isEmpty()) {
+                    mBusList.clear();
+                }
+                else {
+                    for (Bus b : alb) {
+                        b.setBusLine(mBusLine);
+                        mBusList.insertBus(b);
+                    }
+                }
             }
-
-            mBusArrayAdapter.notifyDataSetChanged();
+            finally {
+                mHandler.postDelayed(mRunnable, mDelay);
+                mBusArrayAdapter.notifyDataSetChanged();
+            }
         }
     }
 }

@@ -22,6 +22,9 @@ class BusList {
            b = mBuses.get(iPosition);
         }
         return b;
+    }
 
+    public void clear() {
+        mBuses.clear();
     }
 }
