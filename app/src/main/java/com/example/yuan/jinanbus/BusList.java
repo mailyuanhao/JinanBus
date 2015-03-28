@@ -1,6 +1,7 @@
 package com.example.yuan.jinanbus;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**用于存储当前查询公交线路的公交车
  * Created by Yuan on 2015/3/22.
@@ -23,6 +24,11 @@ class BusList {
         }
         return b;
     }
+
+    public void sort() {
+        Collections.sort(mBuses, new Bus.SortByStation());
+    }
+
 
     public void clear() {
         mBuses.clear();

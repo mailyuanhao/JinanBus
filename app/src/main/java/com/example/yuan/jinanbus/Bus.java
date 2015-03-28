@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -183,5 +184,14 @@ class Bus {
 
     public void setBusLine(BusLine busLine) {
         mBusLine = busLine;
+    }
+
+    public static class SortByStation implements Comparator {
+        @Override
+        public int compare(Object lhs, Object rhs) {
+            Bus l = (Bus)lhs;
+            Bus r = (Bus)rhs;
+            return l.getStationSeqNum() - r.getStationSeqNum();
+        }
     }
 }

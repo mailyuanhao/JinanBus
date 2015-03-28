@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -75,18 +76,21 @@ public class BusFragment extends Fragment {
                 ArrayList<Bus> alb = Bus.parse(s);
                 if (!alb.isEmpty()) {
                     mBusList.clear();
-                }
-                else {
-                    for (Bus b : alb) {
-                        b.setBusLine(mBusLine);
-                        mBusList.insertBus(b);
-                    }
+                    refreshBusList(alb);
                 }
             }
             finally {
                 mHandler.postDelayed(mRunnable, mDelay);
                 mBusArrayAdapter.notifyDataSetChanged();
             }
+        }
+
+        private void refreshBusList(ArrayList<Bus> alb) {
+            for (Bus b : alb) {
+                b.setBusLine(mBusLine);
+                mBusList.insertBus(b);
+            }
+            mBusList.sort();
         }
     }
 }
