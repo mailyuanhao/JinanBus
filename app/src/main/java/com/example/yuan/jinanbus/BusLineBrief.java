@@ -23,6 +23,7 @@ public class BusLineBrief {
     private String mLineName;
     private String mStartStationName;
     private Date mUpdateTime;
+    private JSONObject mJSONObject;
 
     public static ArrayList<BusLineBrief> parse(String json) {
         ArrayList<BusLineBrief> buslines = new ArrayList<>();
@@ -32,6 +33,7 @@ public class BusLineBrief {
             for (int i = 0; i < busJsonArray.length(); i++) {
                 JSONObject busJson = busJsonArray.getJSONObject(i);
                 BusLineBrief bus = parseOneLine(busJson);
+                bus.setJSONObject(busJson);
                 buslines.add(bus);
             }
         } catch (JSONException e) {
@@ -79,5 +81,13 @@ public class BusLineBrief {
     @Override
     public String toString() {
         return String.format("%1s路 %2s -> %3s", mLineName, mStartStationName, mEndStationName);
+    }
+
+    public JSONObject getJSONObject() {
+        return mJSONObject;
+    }
+
+    public void setJSONObject(JSONObject JSONObject) {
+        mJSONObject = JSONObject;
     }
 }
